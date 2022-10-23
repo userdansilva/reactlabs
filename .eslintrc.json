@@ -5,11 +5,11 @@
   },
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
     "airbnb",
+    "plugin:react/recommended",
     "plugin:react-hooks/recommended", // Recommended by React - Hooks roles
-    "plugin:react/jsx-runtime" // Recommended by React - Unnecessary React imports
+    "plugin:react/jsx-runtime", // Recommended by React - Unnecessary React imports
+    "plugin:@typescript-eslint/recommended"
   ],
   "overrides": [],
   "parser": "@typescript-eslint/parser",
@@ -64,7 +64,11 @@
         "ts": "never"
       }
     ],
-    "react/jsx-props-no-spreading": "off"
+    "react/jsx-props-no-spreading": "off",
+    "react/jsx-fragments": [
+      "error",
+      "element"
+    ]
   },
   "settings": {
     "import/parsers": {
