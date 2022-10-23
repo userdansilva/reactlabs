@@ -31,18 +31,18 @@ import { Fragment } from "react";
 import useItem, { FormCreateValues, FormEditValues } from "../hooks/useItem";
 
 interface Item {
-  id: number;
+  id: string;
   name: string;
   age: number;
 }
 
 interface TableItemProps extends Item {
-  onRequestEdit: (item: Item) => void;
-  onRequestDelete: (id: number) => void;
+  onRequestOpenModalEdit: (item: Item) => void;
+  onRequestDelete: (id: string) => void;
 }
 
 function TableItem({
-  id, name, age, onRequestEdit, onRequestDelete,
+  id, name, age, onRequestOpenModalEdit, onRequestDelete,
 }: TableItemProps) {
   return (
     <Tr>
@@ -51,8 +51,18 @@ function TableItem({
       <Td isNumeric>{age}</Td>
       <Td>
         <Stack spacing={2} direction="row">
-          <IconButton icon={<EditIcon />} aria-label="edit item" colorScheme="yellow" onClick={() => onRequestEdit({ id, name, age })} />
-          <IconButton icon={<DeleteIcon />} aria-label="edit item" colorScheme="red" onClick={() => onRequestDelete(id)} />
+          <IconButton
+            icon={<EditIcon />}
+            aria-label="edit item"
+            colorScheme="yellow"
+            onClick={() => onRequestOpenModalEdit({ id, name, age })}
+          />
+          <IconButton
+            icon={<DeleteIcon />}
+            aria-label="edit item"
+            colorScheme="red"
+            onClick={() => onRequestDelete(id)}
+          />
         </Stack>
       </Td>
     </Tr>
@@ -84,13 +94,18 @@ function Crud() {
     mode: "onChange",
   });
 
+  const onRequestOpenModalEdit = (values: FormEditValues) => {
+    reset(values);
+    onOpen();
+  };
+
   const {
     items, handleCreateItem, handleEditItem, handleDelItem,
   } = useItem();
 
-  const onRequestEdit = (values: FormEditValues) => {
-    reset(values);
-    onOpen();
+  const onSubmitEditForm = (values: FormEditValues) => {
+    handleEditItem(values);
+    onClose();
   };
 
   return (
@@ -99,7 +114,7 @@ function Crud() {
         <Stack spacing={8} shadow="lg" padding={12} background="white" rounded="lg">
           <CreateItem handleCreateItem={handleCreateItem} />
 
-          <TableContainer as="form" onSubmit={handleSubmit(handleEditItem)}>
+          <TableContainer>
             <Table>
               <TableCaption>List of items</TableCaption>
               <Thead>
@@ -115,7 +130,7 @@ function Crud() {
                   <TableItem
                     key={item.id}
                     {...item}
-                    onRequestEdit={onRequestEdit}
+                    onRequestOpenModalEdit={onRequestOpenModalEdit}
                     onRequestDelete={handleDelItem}
                   />
                 ))}
@@ -131,7 +146,7 @@ function Crud() {
           <ModalHeader>Edit item</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form onSubmit={handleSubmit(handleEditItem)} id="editForm">
+            <form onSubmit={handleSubmit(onSubmitEditForm)} id="editForm">
               <Stack>
                 <FormControl>
                   <FormLabel>Name</FormLabel>
