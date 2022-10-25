@@ -1,0 +1,12 @@
+"indent": [
+  "error",
+  2,
+  {
+    "ignoredNodes": [
+      "ConditionalExpression"
+    ]
+  }
+],
+"react/require-default-props": "off",
+"react/display-name": "off",
+"react/prop-types": "off",
