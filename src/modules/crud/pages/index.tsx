@@ -115,7 +115,7 @@ function Crud() {
           <CreateItem handleCreateItem={handleCreateItem} />
 
           <TableContainer>
-            <Table>
+            <Table data-testid="table">
               <TableCaption>List of items</TableCaption>
               <Thead>
                 <Tr>
